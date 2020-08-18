@@ -2,16 +2,22 @@ import 'react-hot-loader'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { css } from 'astroturf'
+import { GameScreen } from '@/views/GameScreen'
 
-function renderApp() {
-  ReactDOM.render(<h1>It works</h1>, document.getElementById('app')!)
+function renderApp(): void {
+  ReactDOM.render(<GameScreen />, document.getElementById('app'))
 }
 
 renderApp()
 ;(module as any).hot.accept(renderApp)
 
 css`
-  h1 {
-    font-size: 32px;
+  body {
+    margin: 0;
+    background: #f5f5f5;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
   }
 `

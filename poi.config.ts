@@ -10,6 +10,9 @@ const config: Config = {
       },
     },
   ],
+  devServer: {
+    port: 4040,
+  },
 }
 
 export default config
