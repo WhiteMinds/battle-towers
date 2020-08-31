@@ -1,11 +1,18 @@
 import 'react-hot-loader'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
 import { css } from 'astroturf'
-import { GameScreen } from '@/views/GameScreen'
+import { GameScreen } from '@/components/GameScreen'
+import { store } from './store'
 
 function renderApp(): void {
-  ReactDOM.render(<GameScreen />, document.getElementById('app'))
+  ReactDOM.render(
+    <Provider store={store}>
+      <GameScreen />
+    </Provider>,
+    document.getElementById('app'),
+  )
 }
 
 renderApp()
