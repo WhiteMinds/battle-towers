@@ -1,3 +1,5 @@
+import { ItemId } from './item'
+
 export interface Entity {
   name: string
   health: number
@@ -6,5 +8,6 @@ export interface Entity {
 }
 
 export interface Player extends Entity {
+  equips: ItemId[]
   // ... codes ...
 }

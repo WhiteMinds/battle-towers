@@ -6,6 +6,8 @@ import {
   GameMessage,
   CombatResult,
 } from '@/store/GameMessages/types'
+import { Loot, LootType } from '@/models/loot'
+import { getItem } from '@/templates/items'
 
 export type Props = PropsFromRedux & React.HTMLAttributes<HTMLDivElement>
 
@@ -34,7 +36,11 @@ function getMessageString(msg: GameMessage): string {
       case CombatMessageType.End:
         switch (msg.payload.result) {
           case CombatResult.SourceWin:
-            return `${source.name} 挑战 ${target.name} 成功`
+            let msgText = `${source.name} 挑战 ${target.name} 成功`
+            if (msg.payload.dropped) {
+              msgText += '，获得 ' + getDroppedString(msg.payload.dropped)
+            }
+            return msgText
           case CombatResult.TargetWin:
             return `${source.name} 挑战 ${target.name} 失败`
           case CombatResult.SourceEscape:
@@ -54,4 +60,19 @@ function getMessageString(msg: GameMessage): string {
   }
 
   return 'unknown message type'
+}
+
+function getDroppedString(dropped: Loot[]) {
+  return dropped
+    .map((drop) => {
+      switch (drop.type) {
+        case LootType.EXP:
+          return `[经验值 x${drop.amount}]`
+        case LootType.Gold:
+          return `[金币 x${drop.amount}]`
+        case LootType.Item:
+          return `[${getItem(drop.item).name} x${drop.amount}]`
+      }
+    })
+    .join('、')
 }

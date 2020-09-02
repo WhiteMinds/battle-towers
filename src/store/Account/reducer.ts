@@ -6,8 +6,10 @@ const initialState: Account = {
     health: 10,
     currentHealth: 10,
     attack: 2,
+    equips: [],
   },
   gold: 0,
+  inventory: [],
 }
 
 export function AccountReducer(

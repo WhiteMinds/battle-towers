@@ -9,6 +9,8 @@ import { addGameMessage } from '@/store/GameMessages/actions'
 import { incrementGold } from '@/store/Account/actions'
 import { Entity, Player } from '@/models/entity'
 import View from './view'
+import { ItemTemplateMap } from '@/templates/items'
+import { LootType, Loot } from '@/models/loot'
 
 const mapStateToProps = (state: RootState) => ({
   player: state.account.player,
@@ -16,14 +18,15 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: AppDispatch) => ({
   randomCombat: (player: Player) => {
-    // random a monster to battle
+    // codes for random a monster to battle
     const monster: Entity = {
       name: 'Zombie',
-      health: 5,
-      currentHealth: 5,
+      health: 2,
+      currentHealth: 2,
       attack: 1,
     }
-    // ... codes ...
+
+    // codes for battle
     dispatch(
       addGameMessage({
         type: GameMessageType.Combat,
@@ -39,8 +42,8 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
         type: GameMessageType.Combat,
         payload: {
           type: CombatMessageType.Attack,
-          source: player,
-          target: monster,
+          source: monster,
+          target: player,
           damage: monster.attack,
         },
       }),
@@ -49,21 +52,66 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
       addGameMessage({
         type: GameMessageType.Combat,
         payload: {
-          type: CombatMessageType.End,
+          type: CombatMessageType.Attack,
           source: player,
           target: monster,
-          result: CombatResult.SourceWin,
+          damage: player.attack,
         },
       }),
     )
-    dispatch(incrementGold(10))
+
+    // codes for calc combat result
+    let result = CombatResult.SourceWin
+
+    let dropped: Loot[] | undefined
+    if (result === CombatResult.SourceWin) {
+      // dispatch(createItem({
+      //  ...
+      // }))
+      // codes for calc combat drops
+      dropped = [
+        {
+          type: LootType.EXP,
+          amount: 1,
+        },
+        {
+          type: LootType.Gold,
+          amount: 10,
+        },
+        {
+          type: LootType.Item,
+          amount: 1,
+          item: {
+            isItemData: true,
+            id: 1,
+            templateId: ItemTemplateMap.Sword.id,
+          },
+        },
+      ]
+    }
+
     dispatch(
       addGameMessage({
-        type: GameMessageType.System,
-        // System$GetItem
-        message: '获得金币 10',
+        type: GameMessageType.Combat,
+        payload: {
+          type: CombatMessageType.End,
+          source: player,
+          target: monster,
+          result,
+          dropped,
+        },
       }),
     )
+
+    // codes for give drops
+    dropped?.forEach((drop) => {
+      switch (drop.type) {
+        case LootType.Gold:
+          dispatch(incrementGold(10))
+          break
+        // ... codes ...
+      }
+    })
   },
 })
 

@@ -1,4 +1,5 @@
 import { Entity } from '@/models/entity'
+import { Loot } from '@/models/loot'
 
 // Actions
 // =============================================================================
@@ -52,6 +53,7 @@ export interface CombatMessage$End {
   source: Entity
   target: Entity
   result: CombatResult
+  dropped?: Loot[]
 }
 
 export enum CombatResult {
