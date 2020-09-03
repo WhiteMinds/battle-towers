@@ -8,6 +8,7 @@ import {
 } from '@/store/GameMessages/types'
 import { Loot, LootType } from '@/models/loot'
 import { transferItemData } from '@/templates/items'
+import { MessageWidgets } from './widgets'
 
 export type Props = PropsFromRedux & React.HTMLAttributes<HTMLDivElement>
 
@@ -16,14 +17,14 @@ export default (props: Props) => {
 
   return (
     <div {...containerProps}>
-      {gameMessages.map((item, idx) => (
-        <div key={idx}>{getMessageString(item)}</div>
+      {gameMessages.map((msg, idx) => (
+        <div key={idx}>{renderMessage(msg)}</div>
       ))}
     </div>
   )
 }
 
-function getMessageString(msg: GameMessage): string {
+function renderMessage(msg: GameMessage): React.ReactNode {
   if (msg.type === GameMessageType.System) return msg.message
 
   if (msg.type === GameMessageType.Combat) {
@@ -31,7 +32,12 @@ function getMessageString(msg: GameMessage): string {
 
     switch (msg.payload.type) {
       case CombatMessageType.Start:
-        return `${source.name} 向 ${target.name} 发起了挑战`
+        return (
+          <>
+            <MessageWidgets.Entity entity={source} /> 向{' '}
+            <MessageWidgets.Entity entity={target} /> 发起了挑战
+          </>
+        )
 
       case CombatMessageType.End:
         switch (msg.payload.result) {
