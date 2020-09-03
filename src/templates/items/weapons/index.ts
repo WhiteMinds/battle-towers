@@ -1,5 +1,4 @@
 import { ItemData, Item$Equip, ItemType, EquipSlot } from '@/models/item'
-import { cloneDeep } from 'lodash'
 import { generator as generatorWand } from './wand'
 import { createItemTemplateMap } from '..'
 
@@ -17,7 +16,7 @@ export const WeaponTemplateMap = createItemTemplateMap({
         slot: EquipSlot.MainHead,
         name: '剑',
         level: 1,
-        ...cloneDeep(itemData),
+        ...itemData,
         isItemData: false,
       }
     },

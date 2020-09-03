@@ -1,8 +1,7 @@
-import { ItemData, ItemId } from '@/models/item'
+import { ItemId, ItemData$Stored } from '@/models/item'
 
 export interface GameData {
-  nextItemId: ItemId
-  items: ItemData[]
+  itemMap: Record<ItemId, ItemData$Stored>
 }
 
 // Actions
@@ -12,7 +11,7 @@ export const CREATE_ITEM = 'CREATE_ITEM'
 
 export interface CreateItemAction {
   type: typeof CREATE_ITEM
-  payload: ItemData
+  payload: ItemData$Stored
 }
 
 export type GameDataActionTypes = CreateItemAction

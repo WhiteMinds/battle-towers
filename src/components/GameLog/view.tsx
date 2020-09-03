@@ -7,7 +7,7 @@ import {
   CombatResult,
 } from '@/store/GameMessages/types'
 import { Loot, LootType } from '@/models/loot'
-import { getItem } from '@/templates/items'
+import { transferItemData } from '@/templates/items'
 
 export type Props = PropsFromRedux & React.HTMLAttributes<HTMLDivElement>
 
@@ -71,7 +71,7 @@ function getDroppedString(dropped: Loot[]) {
         case LootType.Gold:
           return `[金币 x${drop.amount}]`
         case LootType.Item:
-          return `[${getItem(drop.item).name} x${drop.amount}]`
+          return `[${transferItemData(drop.item).name} x${drop.amount}]`
       }
     })
     .join('、')

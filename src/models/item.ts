@@ -1,4 +1,5 @@
-export type ItemId = number
+// ItemId 应该是 uuidv4 的字符串
+export type ItemId = string
 
 export interface ItemData {
   // 特殊的标示，用于表示这是一个道具数据而不是完整的道具对象
@@ -6,6 +7,14 @@ export interface ItemData {
   templateId: number
   // 有 itemId 的代表它是一个实际存在的道具，比如玩家的库存道具是由 id 的，而商店的道具则没有
   id?: ItemId
+
+  // 还有一些待考虑的数据，比如：
+  // source: Loot | Shop
+  // gotTime: Date
+}
+
+export interface ItemData$Stored extends ItemData {
+  id: ItemId
 }
 
 export enum ItemType {

@@ -1,4 +1,4 @@
-import { ItemData } from './item'
+import { ItemData$Stored } from './item'
 
 export enum LootType {
   EXP,
@@ -19,7 +19,7 @@ export interface Loot$Gold {
 export interface Loot$Item {
   type: LootType.Item
   amount: number
-  item: ItemData
+  item: ItemData$Stored
 }
 
 export type Loot = Loot$EXP | Loot$Gold | Loot$Item

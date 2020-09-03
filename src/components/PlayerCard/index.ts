@@ -1,4 +1,5 @@
 import { connect, ConnectedProps } from 'react-redux'
+import { v4 } from 'uuid'
 import { AppDispatch, RootState } from '@/store'
 import {
   GameMessageType,
@@ -6,9 +7,11 @@ import {
   CombatResult,
 } from '@/store/GameMessages/types'
 import { addGameMessage } from '@/store/GameMessages/actions'
-import { incrementGold } from '@/store/Account/actions'
+import { incrementGold, addItem } from '@/store/Account/actions'
+import { createItem } from '@/store/GameData/actions'
 import { Entity, Player } from '@/models/entity'
 import View from './view'
+import { ItemData$Stored } from '@/models/item'
 import { ItemTemplateMap } from '@/templates/items'
 import { LootType, Loot } from '@/models/loot'
 
@@ -65,10 +68,14 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
 
     let dropped: Loot[] | undefined
     if (result === CombatResult.SourceWin) {
-      // dispatch(createItem({
-      //  ...
-      // }))
-      // codes for calc combat drops
+      // codes for calc and gen combat drops
+      const newItem: ItemData$Stored = {
+        isItemData: true,
+        templateId: ItemTemplateMap.Sword.id,
+        id: v4(),
+      }
+      dispatch(createItem(newItem))
+
       dropped = [
         {
           type: LootType.EXP,
@@ -81,11 +88,7 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
         {
           type: LootType.Item,
           amount: 1,
-          item: {
-            isItemData: true,
-            id: 1,
-            templateId: ItemTemplateMap.Sword.id,
-          },
+          item: newItem,
         },
       ]
     }
@@ -108,6 +111,9 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
       switch (drop.type) {
         case LootType.Gold:
           dispatch(incrementGold(10))
+          break
+        case LootType.Item:
+          dispatch(addItem(drop.item.id))
           break
         // ... codes ...
       }

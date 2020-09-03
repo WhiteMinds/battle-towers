@@ -1,5 +1,4 @@
 import { ItemData, ItemType, Item$Useable } from '@/models/item'
-import { cloneDeep } from 'lodash'
 import { createItemTemplateMap } from '..'
 
 // 药剂的起始 id
@@ -13,7 +12,7 @@ export const PotionTemplateMap = createItemTemplateMap({
         type: ItemType.Useable,
         name: '力量药剂',
         level: 1,
-        ...cloneDeep(itemData),
+        ...itemData,
         isItemData: false,
       }
     },

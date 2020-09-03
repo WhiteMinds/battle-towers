@@ -1,5 +1,4 @@
 import { ItemData, Item$Equip, ItemType, EquipSlot } from '@/models/item'
-import { cloneDeep } from 'lodash'
 import { createItemTemplateMap } from '..'
 
 // 防具模板的起始 id
@@ -14,7 +13,7 @@ export const ArmorTemplateMap = createItemTemplateMap({
         slot: EquipSlot.Head,
         name: '头盔',
         level: 1,
-        ...cloneDeep(itemData),
+        ...itemData,
         isItemData: false,
       }
     },

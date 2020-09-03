@@ -1,4 +1,4 @@
-import { Account, AccountActionTypes, OP_GOLD } from './types'
+import { Account, AccountActionTypes, OP_GOLD, ADD_ITEM } from './types'
 
 const initialState: Account = {
   player: {
@@ -21,6 +21,11 @@ export function AccountReducer(
       return {
         ...state,
         gold: state.gold + action.payload,
+      }
+    case ADD_ITEM:
+      return {
+        ...state,
+        inventory: [...state.inventory, action.payload],
       }
     default:
       return state

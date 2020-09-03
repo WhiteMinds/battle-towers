@@ -2,6 +2,7 @@ import { ItemData, Item } from '@/models/item'
 import { WeaponTemplateMap } from './weapons'
 import { ArmorTemplateMap } from './armors'
 import { PotionTemplateMap } from './potions'
+import { memoize } from 'lodash'
 
 export const ItemTemplateMap = createItemTemplateMap({
   ...WeaponTemplateMap,
@@ -13,7 +14,7 @@ export const ItemTemplates = Object.values(ItemTemplateMap)
 /**
  * 将存储的 ItemData 通过模板转换为完整的 Item
  */
-export function getItem(itemData: ItemData): Item {
+function _transferItemData(itemData: ItemData): Item {
   const template = ItemTemplates.find(
     (template) => template.id === itemData.templateId,
   )
@@ -24,6 +25,7 @@ export function getItem(itemData: ItemData): Item {
 
   return template.generator(itemData)
 }
+export const transferItemData = memoize(_transferItemData)
 
 // types
 // =============================================================================

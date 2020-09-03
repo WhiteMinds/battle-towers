@@ -17,4 +17,11 @@ export interface OPGoldAction {
   payload: number
 }
 
-export type AccountActionTypes = OPGoldAction
+export const ADD_ITEM = 'ADD_ITEM'
+
+export interface AddItemAction {
+  type: typeof ADD_ITEM
+  payload: ItemId
+}
+
+export type AccountActionTypes = OPGoldAction | AddItemAction
