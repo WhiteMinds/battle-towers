@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { FC } from 'react'
-import { Entity } from '@/models/entity'
+import { Entity, isPlayer } from '@/models/entity'
 import MouseOverPopover from '../../MouseOverPopover'
 import { EntityCard } from './EntityCard'
 
@@ -11,7 +11,7 @@ const MessageWidget$Entity: FC<{
     <MouseOverPopover popupContent={<EntityCard entity={props.entity} />}>
       <span
         style={{
-          color: 'red',
+          color: isPlayer(props.entity) ? 'blue' : 'red',
         }}
       >
         {props.entity.name}

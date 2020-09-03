@@ -1,13 +1,13 @@
 import { Account, AccountActionTypes, OP_GOLD, ADD_ITEM } from './types'
+import { createPlayer } from '@/models/entity'
 
 const initialState: Account = {
-  player: {
+  player: createPlayer({
     name: 'WhiteMind',
     health: 10,
     currentHealth: 10,
     attack: 2,
-    equips: [],
-  },
+  }),
   gold: 0,
   inventory: [],
 }

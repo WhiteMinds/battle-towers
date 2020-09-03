@@ -58,7 +58,13 @@ function renderMessage(msg: GameMessage): React.ReactNode {
         }
 
       case CombatMessageType.Attack:
-        return `${source.name} 攻击了 ${target.name}，造成伤害 ${msg.payload.damage}`
+        return (
+          <>
+            <MessageWidgets.Entity entity={source} /> 攻击了{' '}
+            <MessageWidgets.Entity entity={target} />
+            ，造成伤害 {msg.payload.damage}
+          </>
+        )
 
       default:
         return 'unknown combat message type'
