@@ -16,6 +16,7 @@ export const WeaponTemplateMap = createItemTemplateMap({
         slot: EquipSlot.MainHead,
         name: '剑',
         level: 1,
+        attack: 1,
         ...itemData,
         isItemData: false,
       }

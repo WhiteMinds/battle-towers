@@ -53,7 +53,7 @@ export interface CombatMessage$End {
   source: Entity
   target: Entity
   result: CombatResult
-  dropped?: Loot[]
+  loots?: Loot[]
 }
 
 export enum CombatResult {

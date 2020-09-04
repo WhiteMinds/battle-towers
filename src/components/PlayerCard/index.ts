@@ -29,15 +29,15 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
     const { combatMsgs, loots } = combat(player, monster)
     combatMsgs.forEach((msg) => dispatch(addGameMessage(msg)))
 
-    // codes for give drops
-    loots?.forEach((drop) => {
-      switch (drop.type) {
+    // codes for give drop loots
+    loots?.forEach((loot) => {
+      switch (loot.type) {
         case LootType.Gold:
           dispatch(incrementGold(10))
           break
         case LootType.Item:
-          dispatch(createStoredItem(drop.item))
-          dispatch(addItem(drop.item.id))
+          dispatch(createStoredItem(loot.item))
+          dispatch(addItem(loot.item.id))
           break
         // ... codes ...
       }
@@ -98,7 +98,7 @@ function combat(
       if (monster.currentHealth <= 0) {
         // win
         const result = CombatResult.SourceWin
-        // codes for calc and gen combat drops
+        // codes for calc and gen combat drop loots
         const loots: Loot[] = [
           {
             type: LootType.EXP,
@@ -126,7 +126,7 @@ function combat(
             source: player,
             target: monster,
             result,
-            dropped: loots,
+            loots: loots,
           },
         })
 
