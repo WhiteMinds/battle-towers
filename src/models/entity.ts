@@ -1,6 +1,10 @@
+import { v4 } from 'uuid'
 import { ItemId } from './item'
 
+export type EntityId = ReturnType<typeof v4>
+
 export interface Entity {
+  id: EntityId
   name: string
   health: number
   currentHealth: number
@@ -19,6 +23,7 @@ export function isPlayer(entity: Entity): entity is Player {
 
 export function createEntity(data?: Partial<Entity>): Entity {
   return {
+    id: v4(),
     name: 'base',
     health: 1,
     currentHealth: 1,

@@ -1,5 +1,6 @@
-// ItemId 应该是 uuidv4 的字符串
-export type ItemId = string
+import { v4 } from 'uuid'
+
+export type ItemId = ReturnType<typeof v4>
 
 export interface ItemData {
   // 特殊的标示，用于表示这是一个道具数据而不是完整的道具对象
