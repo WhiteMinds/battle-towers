@@ -10,23 +10,31 @@ import {
 import { addGameMessage } from '@/store/GameMessages/actions'
 import { incrementGold, addItem } from '@/store/Account/actions'
 import { createStoredItem } from '@/store/GameData/actions'
-import { Player, createEntity, Entity } from '@/models/entity'
+import { Entity$Player, createMonster } from '@/models/entity'
 import View from './view'
 import { ItemTemplateMap } from '@/templates/items'
 import { LootType, Loot } from '@/models/loot'
 import { random } from 'lodash'
 import { produce } from 'immer'
+import {
+  transToBattlingEntity,
+  BattlingMonster,
+  BattlingPlayer,
+} from '@/models/battle'
 
 const mapStateToProps = (state: RootState) => ({
   player: state.account.player,
 })
 
 const mapDispatchToProps = (dispatch: AppDispatch) => ({
-  randomCombat: (player: Player) => {
+  randomCombat: (player: Entity$Player) => {
     // codes for random a monster to battle
     const monster = randomMonster()
 
-    const { combatMsgs, loots } = combat(player, monster)
+    const { combatMsgs, loots } = combat(
+      transToBattlingEntity(player),
+      transToBattlingEntity(monster),
+    )
     combatMsgs.forEach((msg) => dispatch(addGameMessage(msg)))
 
     // codes for give drop loots
@@ -47,7 +55,7 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
 
 function randomMonster() {
   const helath = random(1, 10)
-  return createEntity({
+  return createMonster({
     name: 'Zombie',
     health: helath,
     currentHealth: helath,
@@ -56,8 +64,8 @@ function randomMonster() {
 }
 
 function combat(
-  player: Player,
-  monster: Entity,
+  player: BattlingPlayer,
+  monster: BattlingMonster,
 ): {
   combatMsgs: GameMessage[]
   result: CombatResult

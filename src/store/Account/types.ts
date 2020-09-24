@@ -1,8 +1,8 @@
-import { Player } from '@/models/entity'
+import { Entity$Player } from '@/models/entity'
 import { ItemId } from '@/models/item'
 
 export interface Account {
-  player: Player
+  player: Entity$Player
   gold: number
   inventory: ItemId[]
 }

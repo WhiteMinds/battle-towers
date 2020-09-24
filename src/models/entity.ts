@@ -3,7 +3,7 @@ import { ItemId } from './item'
 
 export type EntityId = ReturnType<typeof v4>
 
-export interface Entity {
+export interface BaseEntity {
   id: EntityId
   name: string
   health: number
@@ -12,19 +12,37 @@ export interface Entity {
   defense: number
 }
 
-export interface Player extends Entity {
+export enum EntityType {
+  Common,
+  Player,
+  Monster,
+}
+
+export interface Entity$Common extends BaseEntity {
+  type: EntityType.Common
+}
+
+export interface Entity$Player extends BaseEntity {
+  type: EntityType.Player
   equips: ItemId[]
   // ... codes ...
 }
 
-export function isPlayer(entity: Entity): entity is Player {
-  return 'equips' in entity
+export interface Entity$Monster extends BaseEntity {
+  type: EntityType.Monster
+  // ... codes ...
 }
 
-export function createEntity(data?: Partial<Entity>): Entity {
+export type Entity = Entity$Common | Entity$Player | Entity$Monster
+
+export function isPlayer(entity: Entity): entity is Entity$Player {
+  return entity.type === EntityType.Player
+}
+
+export function createBaseEntity(data?: Partial<BaseEntity>): BaseEntity {
   return {
     id: v4(),
-    name: 'base',
+    name: 'default',
     health: 1,
     currentHealth: 1,
     attack: 0,
@@ -33,10 +51,19 @@ export function createEntity(data?: Partial<Entity>): Entity {
   }
 }
 
-export function createPlayer(data: Partial<Player>): Player {
+export function createPlayer(data?: Partial<Entity$Player>): Entity$Player {
   return {
-    ...createEntity(),
+    ...createBaseEntity(),
+    type: EntityType.Player,
     equips: [],
+    ...data,
+  }
+}
+
+export function createMonster(data?: Partial<Entity$Monster>): Entity$Monster {
+  return {
+    ...createBaseEntity(),
+    type: EntityType.Monster,
     ...data,
   }
 }
