@@ -1,4 +1,4 @@
-import { AccountActionTypes, OP_GOLD, ADD_ITEM } from './types'
+import { AccountActionTypes, OP_GOLD, ADD_ITEM, SET_BATTLING } from './types'
 import { ItemId } from '@/models/item'
 
 export function incrementGold(amount: number): AccountActionTypes {
@@ -19,5 +19,12 @@ export function addItem(itemId: ItemId): AccountActionTypes {
   return {
     type: ADD_ITEM,
     payload: itemId,
+  }
+}
+
+export function setBattling(payload: boolean): AccountActionTypes {
+  return {
+    type: SET_BATTLING,
+    payload,
   }
 }

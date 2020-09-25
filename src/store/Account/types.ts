@@ -5,6 +5,9 @@ export interface Account {
   player: Entity$Player
   gold: number
   inventory: ItemId[]
+
+  // TODO: 在启动时检查这个状态，如果为 true，尝试清理 gameMsgs 里未正常结束的战斗的日志
+  inBattling: boolean
 }
 
 // Actions
@@ -24,4 +27,14 @@ export interface AddItemAction {
   payload: ItemId
 }
 
-export type AccountActionTypes = OPGoldAction | AddItemAction
+export const SET_BATTLING = 'SET_BATTLING'
+
+export interface SetBattlingAction {
+  type: typeof SET_BATTLING
+  payload: boolean
+}
+
+export type AccountActionTypes =
+  | OPGoldAction
+  | AddItemAction
+  | SetBattlingAction

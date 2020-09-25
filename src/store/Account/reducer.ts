@@ -1,4 +1,10 @@
-import { Account, AccountActionTypes, OP_GOLD, ADD_ITEM } from './types'
+import {
+  Account,
+  AccountActionTypes,
+  OP_GOLD,
+  ADD_ITEM,
+  SET_BATTLING,
+} from './types'
 import { createPlayer } from '@/models/entity'
 
 const initialState: Account = {
@@ -10,6 +16,8 @@ const initialState: Account = {
   }),
   gold: 0,
   inventory: [],
+
+  inBattling: false,
 }
 
 export function AccountReducer(
@@ -26,6 +34,11 @@ export function AccountReducer(
       return {
         ...state,
         inventory: [...state.inventory, action.payload],
+      }
+    case SET_BATTLING:
+      return {
+        ...state,
+        inBattling: action.payload,
       }
     default:
       return state

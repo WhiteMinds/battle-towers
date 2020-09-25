@@ -8,9 +8,10 @@ import {
   GameMessage,
 } from '@/store/GameMessages/types'
 import { addGameMessage } from '@/store/GameMessages/actions'
-import { incrementGold, addItem } from '@/store/Account/actions'
+import { incrementGold, addItem, setBattling } from '@/store/Account/actions'
+import { Account } from '@/store/Account/types'
 import { createStoredItem } from '@/store/GameData/actions'
-import { Entity$Player, createMonster } from '@/models/entity'
+import { createMonster } from '@/models/entity'
 import View from './view'
 import { ItemTemplateMap } from '@/templates/items'
 import { LootType, Loot } from '@/models/loot'
@@ -23,19 +24,29 @@ import {
 } from '@/models/battle'
 
 const mapStateToProps = (state: RootState) => ({
-  player: state.account.player,
+  account: state.account,
 })
 
 const mapDispatchToProps = (dispatch: AppDispatch) => ({
-  randomCombat: (player: Entity$Player) => {
+  randomCombat: async (account: Account) => {
+    // codes for battle state check
+    if (account.inBattling) return
+
     // codes for random a monster to battle
     const monster = randomMonster()
 
     const { combatMsgs, loots } = combat(
-      transToBattlingEntity(player),
+      transToBattlingEntity(account.player),
       transToBattlingEntity(monster),
     )
-    combatMsgs.forEach((msg) => dispatch(addGameMessage(msg)))
+
+    dispatch(setBattling(true))
+    while (combatMsgs.length > 0) {
+      dispatch(addGameMessage(combatMsgs.shift()!))
+      if (combatMsgs.length === 0) break
+      await new Promise((r) => setTimeout(r, 500))
+    }
+    dispatch(setBattling(false))
 
     // codes for give drop loots
     loots?.forEach((loot) => {
@@ -201,7 +212,7 @@ const connector = connect(
     ...stateProps,
     ...dispatchProps,
     randomCombat() {
-      return dispatchProps.randomCombat(stateProps.player)
+      return dispatchProps.randomCombat(stateProps.account)
     },
   }),
 )

@@ -4,11 +4,14 @@ import { PropsFromRedux } from './index'
 export type Props = PropsFromRedux & React.HTMLAttributes<HTMLDivElement>
 
 export default (props: Props) => {
-  const { player, randomCombat, ...containerProps } = props
+  const { account, randomCombat, ...containerProps } = props
 
   return (
     <div {...containerProps}>
-      {player.name} <button onClick={randomCombat}>combat</button>
+      {account.player.name}{' '}
+      <button onClick={randomCombat} disabled={account.inBattling}>
+        combat
+      </button>
     </div>
   )
 }
