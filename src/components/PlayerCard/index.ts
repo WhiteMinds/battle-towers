@@ -8,7 +8,12 @@ import {
   GameMessage,
 } from '@/store/GameMessages/types'
 import { addGameMessage } from '@/store/GameMessages/actions'
-import { incrementGold, addItem, setBattling } from '@/store/Account/actions'
+import {
+  incrementGold,
+  addItem,
+  setBattling,
+  addEXP,
+} from '@/store/Account/actions'
 import { Account } from '@/store/Account/types'
 import { createStoredItem } from '@/store/GameData/actions'
 import { createMonster } from '@/models/entity'
@@ -52,11 +57,15 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
     loots?.forEach((loot) => {
       switch (loot.type) {
         case LootType.Gold:
-          dispatch(incrementGold(10))
+          dispatch(incrementGold(loot.amount))
           break
         case LootType.Item:
+          // TODO: 需要妥善处理 loot.amount
           dispatch(createStoredItem(loot.item))
           dispatch(addItem(loot.item.id))
+          break
+        case LootType.EXP:
+          dispatch(addEXP(loot.amount))
           break
         // ... codes ...
       }
@@ -121,11 +130,11 @@ function combat(
         const loots: Loot[] = [
           {
             type: LootType.EXP,
-            amount: 1,
+            amount: 15,
           },
           {
             type: LootType.Gold,
-            amount: 10,
+            amount: random(1, 10),
           },
           {
             type: LootType.Item,

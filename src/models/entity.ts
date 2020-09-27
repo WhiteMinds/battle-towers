@@ -6,6 +6,7 @@ export type EntityId = ReturnType<typeof v4>
 export interface BaseEntity {
   id: EntityId
   name: string
+  level: number
   health: number
   currentHealth: number
   attack: number
@@ -24,6 +25,7 @@ export interface Entity$Common extends BaseEntity {
 
 export interface Entity$Player extends BaseEntity {
   type: EntityType.Player
+  exp: number
   equips: ItemId[]
   // ... codes ...
 }
@@ -43,6 +45,7 @@ export function createBaseEntity(data?: Partial<BaseEntity>): BaseEntity {
   return {
     id: v4(),
     name: 'default',
+    level: 1,
     health: 1,
     currentHealth: 1,
     attack: 0,
@@ -55,6 +58,7 @@ export function createPlayer(data?: Partial<Entity$Player>): Entity$Player {
   return {
     ...createBaseEntity(),
     type: EntityType.Player,
+    exp: 0,
     equips: [],
     ...data,
   }

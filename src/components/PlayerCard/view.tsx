@@ -8,7 +8,7 @@ export default (props: Props) => {
 
   return (
     <div {...containerProps}>
-      {account.player.name}{' '}
+      [LV.{account.player.level}] {account.player.name}{' '}
       <button onClick={randomCombat} disabled={account.inBattling}>
         combat
       </button>

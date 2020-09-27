@@ -1,4 +1,10 @@
-import { AccountActionTypes, OP_GOLD, ADD_ITEM, SET_BATTLING } from './types'
+import {
+  AccountActionTypes,
+  OP_GOLD,
+  ADD_ITEM,
+  SET_BATTLING,
+  ADD_EXP,
+} from './types'
 import { ItemId } from '@/models/item'
 
 export function incrementGold(amount: number): AccountActionTypes {
@@ -12,6 +18,13 @@ export function decrementGold(amount: number): AccountActionTypes {
   return {
     type: OP_GOLD,
     payload: -amount,
+  }
+}
+
+export function addEXP(amount: number): AccountActionTypes {
+  return {
+    type: ADD_EXP,
+    payload: amount,
   }
 }
 
