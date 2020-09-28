@@ -35,7 +35,12 @@ export interface BaseItem extends Omit<ItemData, 'isItemData'> {
   level: number
 }
 
-export interface Item$Material extends BaseItem {
+interface Stackable {
+  stack: number
+  maxStack?: number
+}
+
+export interface Item$Material extends BaseItem, Stackable {
   type: ItemType.Material
 }
 
@@ -47,7 +52,7 @@ export interface Item$Equip extends BaseItem {
   defense?: number
 }
 
-export interface Item$Useable extends BaseItem {
+export interface Item$Useable extends BaseItem, Stackable {
   type: ItemType.Useable
 }
 

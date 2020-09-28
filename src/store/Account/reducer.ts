@@ -25,7 +25,7 @@ const initialState: Account = {
 export function AccountReducer(
   state = initialState,
   action: AccountActionTypes,
-) {
+): Account {
   switch (action.type) {
     case OP_GOLD:
       return {
@@ -44,10 +44,11 @@ export function AccountReducer(
         }
       })
     case ADD_ITEM:
-      // TODO: 根据物品是否可叠加来决定是直接新增物品，还是修改旧有物品的堆叠数
+      // TODO: 根据物品是否可叠加来决定是直接新增物品，还是修改旧有物品的堆叠数（这一步似乎
+      // 不应该在这做，应该在 action 里）
       return {
         ...state,
-        inventory: [...state.inventory, action.payload],
+        inventory: [...state.inventory, action.payload.itemId],
       }
     case SET_BATTLING:
       return {

@@ -30,6 +30,7 @@ import {
 
 const mapStateToProps = (state: RootState) => ({
   account: state.account,
+  itemMap: state.gameData.itemMap,
 })
 
 const mapDispatchToProps = (dispatch: AppDispatch) => ({

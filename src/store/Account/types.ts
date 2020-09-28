@@ -31,7 +31,10 @@ export const ADD_ITEM = 'ADD_ITEM'
 
 export interface AddItemAction {
   type: typeof ADD_ITEM
-  payload: ItemId
+  payload: {
+    itemId: ItemId
+    amount?: number
+  }
 }
 
 export const SET_BATTLING = 'SET_BATTLING'

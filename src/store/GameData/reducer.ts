@@ -7,7 +7,7 @@ const initialState: GameData = {
 export function GameDataReducer(
   state = initialState,
   action: GameDataActionTypes,
-) {
+): GameData {
   switch (action.type) {
     case CREATE_ITEM:
       const newItem = action.payload

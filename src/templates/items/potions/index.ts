@@ -12,6 +12,7 @@ export const PotionTemplateMap = createItemTemplateMap({
         type: ItemType.Useable,
         name: '力量药剂',
         level: 1,
+        stack: 1,
         ...itemData,
         isItemData: false,
       }

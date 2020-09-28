@@ -28,10 +28,13 @@ export function addEXP(amount: number): AccountActionTypes {
   }
 }
 
-export function addItem(itemId: ItemId): AccountActionTypes {
+export function addItem(itemId: ItemId, amount?: number): AccountActionTypes {
   return {
     type: ADD_ITEM,
-    payload: itemId,
+    payload: {
+      itemId,
+      amount,
+    },
   }
 }
 
