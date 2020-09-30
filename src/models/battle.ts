@@ -1,5 +1,7 @@
 import { Entity, Entity$Player, Entity$Monster } from './entity'
 import { Buff } from './buff'
+import { Loot } from './loot'
+import { GameMessage, CombatResult } from '@/store/GameMessages/types'
 
 export interface EntityBattleState {
   hasBattleState: true
@@ -23,4 +25,13 @@ export function transToBattlingEntity<T extends Entity>(
     hasBattleState: true,
     buffs: [],
   }
+}
+
+// 用于完整的描述一场战斗目前的状态
+export interface CombatInfo {
+  player: BattlingPlayer
+  monster: BattlingMonster
+  combatMsgs: GameMessage[]
+  result?: CombatResult
+  loots?: Loot[]
 }

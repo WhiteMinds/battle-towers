@@ -20,13 +20,14 @@ import { createMonster } from '@/models/entity'
 import View from './view'
 import { ItemTemplateMap } from '@/templates/items'
 import { LootType, Loot } from '@/models/loot'
-import { random } from 'lodash'
+import { random, sample } from 'lodash'
 import { produce } from 'immer'
 import {
   transToBattlingEntity,
   BattlingMonster,
   BattlingPlayer,
 } from '@/models/battle'
+import { useSkill } from '@/templates/skills'
 
 const mapStateToProps = (state: RootState) => ({
   account: state.account,
@@ -47,9 +48,9 @@ const mapDispatchToProps = (dispatch: AppDispatch) => ({
     )
 
     dispatch(setBattling(true))
-    while (combatMsgs.length > 0) {
-      dispatch(addGameMessage(combatMsgs.shift()!))
-      if (combatMsgs.length === 0) break
+    for (let i = 0; i < combatMsgs.length; i++) {
+      dispatch(addGameMessage(combatMsgs[i]))
+      if (i === combatMsgs.length - 1) break
       await new Promise((r) => setTimeout(r, 500))
     }
     dispatch(setBattling(false))
@@ -92,7 +93,7 @@ function combat(
   result: CombatResult
   loots?: Loot[]
 } {
-  const combatMsgs: GameMessage[] = [
+  let combatMsgs: GameMessage[] = [
     {
       type: GameMessageType.Combat,
       payload: {
@@ -110,19 +111,16 @@ function combat(
       // player round
       nextRoundOwner = 'target'
       // codes for calc attack damage
-      const damage = player.attack
-      combatMsgs.push({
-        type: GameMessageType.Combat,
-        payload: {
-          type: CombatMessageType.Attack,
-          source: player,
-          target: monster,
-          damage,
+      ;({ combatMsgs, player, monster } = useSkill(
+        sample(player.skills)!,
+        {
+          combatMsgs,
+          player,
+          monster,
         },
-      })
-      monster = produce(monster, (monster) => {
-        monster.currentHealth -= damage
-      })
+        player.id,
+        monster.id,
+      ))
 
       if (monster.currentHealth <= 0) {
         // win
@@ -148,15 +146,17 @@ function combat(
           },
         ]
 
-        combatMsgs.push({
-          type: GameMessageType.Combat,
-          payload: {
-            type: CombatMessageType.End,
-            source: player,
-            target: monster,
-            result,
-            loots: loots,
-          },
+        combatMsgs = produce(combatMsgs, (combatMsgs) => {
+          combatMsgs.push({
+            type: GameMessageType.Combat,
+            payload: {
+              type: CombatMessageType.End,
+              source: player,
+              target: monster,
+              result,
+              loots: loots,
+            },
+          })
         })
 
         return {
@@ -169,31 +169,30 @@ function combat(
       // monster round
       nextRoundOwner = 'source'
       // codes for calc attack damage
-      const damage = monster.attack
-      combatMsgs.push({
-        type: GameMessageType.Combat,
-        payload: {
-          type: CombatMessageType.Attack,
-          source: monster,
-          target: player,
-          damage,
+      ;({ combatMsgs, player, monster } = useSkill(
+        sample(monster.skills)!,
+        {
+          combatMsgs,
+          player,
+          monster,
         },
-      })
-      player = produce(player, (player) => {
-        player.currentHealth -= damage
-      })
+        monster.id,
+        player.id,
+      ))
 
       if (player.currentHealth <= 0) {
         // lose
         const result = CombatResult.TargetWin
-        combatMsgs.push({
-          type: GameMessageType.Combat,
-          payload: {
-            type: CombatMessageType.End,
-            source: player,
-            target: monster,
-            result,
-          },
+        combatMsgs = produce(combatMsgs, (combatMsgs) => {
+          combatMsgs.push({
+            type: GameMessageType.Combat,
+            payload: {
+              type: CombatMessageType.End,
+              source: player,
+              target: monster,
+              result,
+            },
+          })
         })
         return {
           combatMsgs,
@@ -202,10 +201,6 @@ function combat(
       }
     }
   }
-
-  player = produce(player, (player) => {
-    player.currentHealth -= 1
-  })
 
   return {
     combatMsgs,

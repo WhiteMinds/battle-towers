@@ -1,5 +1,7 @@
 import { v4 } from 'uuid'
 import { ItemId } from './item'
+import { SkillData } from './skill'
+import { SkillTemplateMap } from '@/templates/skills'
 
 export type EntityId = ReturnType<typeof v4>
 
@@ -27,11 +29,13 @@ export interface Entity$Player extends BaseEntity {
   type: EntityType.Player
   exp: number
   equips: ItemId[]
+  skills: SkillData[]
   // ... codes ...
 }
 
 export interface Entity$Monster extends BaseEntity {
   type: EntityType.Monster
+  skills: SkillData[]
   // ... codes ...
 }
 
@@ -60,6 +64,20 @@ export function createPlayer(data?: Partial<Entity$Player>): Entity$Player {
     type: EntityType.Player,
     exp: 0,
     equips: [],
+    skills: [
+      {
+        isPartialData: true,
+        templateId: SkillTemplateMap.NormalAttack.id,
+      },
+      {
+        isPartialData: true,
+        templateId: SkillTemplateMap.Thump.id,
+      },
+      {
+        isPartialData: true,
+        templateId: SkillTemplateMap.Cure.id,
+      },
+    ],
     ...data,
   }
 }
@@ -68,6 +86,12 @@ export function createMonster(data?: Partial<Entity$Monster>): Entity$Monster {
   return {
     ...createBaseEntity(),
     type: EntityType.Monster,
+    skills: [
+      {
+        isPartialData: true,
+        templateId: SkillTemplateMap.NormalAttack.id,
+      },
+    ],
     ...data,
   }
 }

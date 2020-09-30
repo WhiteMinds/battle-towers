@@ -1,5 +1,6 @@
 import { Entity } from '@/models/entity'
 import { Loot } from '@/models/loot'
+import { Skill } from '@/models/skill'
 
 // Actions
 // =============================================================================
@@ -39,7 +40,7 @@ export type GameMessage = GameMessage$System | GameMessage$Combat
 export enum CombatMessageType {
   Start,
   End,
-  Attack,
+  UseSkill,
 }
 
 export interface CombatMessage$Start {
@@ -63,14 +64,16 @@ export enum CombatResult {
   TargetEscape,
 }
 
-export interface CombatMessage$Attack {
-  type: CombatMessageType.Attack
+export interface CombatMessage$UseSkill {
+  type: CombatMessageType.UseSkill
+  skill: Skill
   source: Entity
   target: Entity
-  damage: number
+  damage?: number
+  regen?: number
 }
 
 export type CombatMessage =
   | CombatMessage$Start
   | CombatMessage$End
-  | CombatMessage$Attack
+  | CombatMessage$UseSkill

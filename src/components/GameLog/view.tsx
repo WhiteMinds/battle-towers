@@ -61,12 +61,25 @@ function renderMessage(msg: GameMessage): React.ReactNode {
             return 'unknown combat result type'
         }
 
-      case CombatMessageType.Attack:
+      case CombatMessageType.UseSkill:
         return (
           <>
-            <MessageWidgets.Entity entity={source} /> 攻击了{' '}
-            <MessageWidgets.Entity entity={target} />
-            ，造成伤害 {msg.payload.damage}
+            {source.id !== target.id ? (
+              <>
+                <MessageWidgets.Entity entity={source} /> 对{' '}
+                <MessageWidgets.Entity entity={target} />{' '}
+              </>
+            ) : (
+              <>
+                <MessageWidgets.Entity entity={source} />{' '}
+              </>
+            )}
+            使用 {msg.payload.skill.name}
+            {msg.payload.damage ? (
+              <>，造成伤害 {msg.payload.damage}</>
+            ) : msg.payload.regen ? (
+              <>，恢复生命 {msg.payload.regen}</>
+            ) : null}
           </>
         )
 
